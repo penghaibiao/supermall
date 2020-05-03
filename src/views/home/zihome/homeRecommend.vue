@@ -29,6 +29,7 @@ export default {
   box-shadow: 0 3px 10px rgba(100, 100, 100, 0.1);
   margin-top: 6px;
   margin-bottom: 10px;
+  font-size: 14px;
 }
 .nvrbar {
   flex: 1;
@@ -39,6 +40,9 @@ export default {
 }
 .nvrbar img {
   width: 60px;
+  margin-bottom: 6px;
+}
+.homeRecommend div {
   margin-bottom: 6px;
 }
 </style>
