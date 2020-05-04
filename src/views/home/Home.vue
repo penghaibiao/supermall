@@ -3,13 +3,21 @@
     <Navbar class="gouwu">
       <div slot="nav-center">默默购物城</div>
     </Navbar>
-    <scroll class="content">
+    <scroll
+      class="content"
+      ref="scroll"
+      :probeType="3"
+      @scroll="contentscroll"
+      :pullUpLoad="true"
+      @pullingUp="loadMore"
+    >
       <homeswiper :banners="banners" class="homeswiper"></homeswiper>
       <homeRecommends :recommends="recommends"></homeRecommends>
       <fashion></fashion>
       <tabc class="tabc" :hometitle="hometitle" @tabclick="tabclick"></tabc>
       <goodslist :goods="goods[goodstype].list"></goodslist>
     </scroll>
+    <backtop @click.native="backclick" v-show="isshow"></backtop>
   </div>
 </template>
 <script>
@@ -19,6 +27,8 @@ import fashion from "./zihome/fashion"; //本周流行
 
 import Navbar from "../../components/common/navbar/NavBar";
 import scroll from "../../components/common/scroll/scroll"; //滚动
+import backtop from "../../components/content/backtop/backtop"; //
+
 import goodslist from "../../components/content/goods/goodslist";
 import tabc from "../../components/content/tabcontrol/tabc";
 
@@ -44,7 +54,8 @@ export default {
           list: []
         }
       },
-      goodstype: "pop"
+      goodstype: "pop",
+      isshow: false
     };
   },
   created() {
@@ -60,7 +71,8 @@ export default {
     fashion,
     tabc,
     goodslist,
-    scroll
+    scroll,
+    backtop
   },
   methods: {
     // 网络请求
@@ -100,6 +112,20 @@ export default {
           break;
       }
       console.log(index);
+    },
+    backclick() {
+      this.$refs.scroll.scroll.scrollTo(0, 0, 1000);
+    },
+    contentscroll(position) {
+      if (Math.abs(position.y) >= 1000) {
+        this.isshow = true;
+      } else {
+        this.isshow = false;
+      }
+    },
+    loadMore() {
+      this.gethomegood(this.goodstype);
+      this.$refs.scroll.scroll.finishPullUp();
     }
   }
 };
@@ -107,7 +133,7 @@ export default {
 <style>
 .gouwu {
   width: 100%;
-  background-color: var(--color-tint);
+  background-color: #ff0077;
   color: aliceblue;
   font-weight: 700;
   position: fixed;

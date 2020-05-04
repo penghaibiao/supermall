@@ -15,10 +15,29 @@ export default {
       scroll: null
     };
   },
+  props: {
+    probeType: Number,
+    pullUpLoad: {
+      type: Boolean,
+      default: false
+    }
+  },
   mounted() {
     console.log(BScroll);
 
-    this.scroll = new BScroll(this.$refs.wrapper, {});
+    this.scroll = new BScroll(this.$refs.wrapper, {
+      click: true,
+      probeType: this.probeType,
+      pullUpLoad: this.pullUpLoad
+    });
+    this.scroll.scrollTo("x", "y", "tiem");
+    this.scroll.on("scroll", position => {
+      this.$emit("scroll", position);
+    });
+
+    this.scroll.on("pullingUp", () => {
+      this.$emit("pullingUp");
+    });
   }
 };
 </script>
