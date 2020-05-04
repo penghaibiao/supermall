@@ -3,63 +3,13 @@
     <Navbar class="gouwu">
       <div slot="nav-center">默默购物城</div>
     </Navbar>
-    <homeswiper :banners="banners" class="homeswiper"></homeswiper>
-    <homeRecommends :recommends="recommends"></homeRecommends>
-    <fashion></fashion>
-    <tabc class="tabc" :hometitle="hometitle"></tabc>
-    <goodslist :goods="goods['pop'].list"></goodslist>
-    <ul>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-      <li>zai</li>
-    </ul>
+    <scroll class="content">
+      <homeswiper :banners="banners" class="homeswiper"></homeswiper>
+      <homeRecommends :recommends="recommends"></homeRecommends>
+      <fashion></fashion>
+      <tabc class="tabc" :hometitle="hometitle" @tabclick="tabclick"></tabc>
+      <goodslist :goods="goods[goodstype].list"></goodslist>
+    </scroll>
   </div>
 </template>
 <script>
@@ -68,6 +18,7 @@ import homeRecommends from "./zihome/homeRecommend";
 import fashion from "./zihome/fashion"; //本周流行
 
 import Navbar from "../../components/common/navbar/NavBar";
+import scroll from "../../components/common/scroll/scroll"; //滚动
 import goodslist from "../../components/content/goods/goodslist";
 import tabc from "../../components/content/tabcontrol/tabc";
 
@@ -92,7 +43,8 @@ export default {
           page: 0,
           list: []
         }
-      }
+      },
+      goodstype: "pop"
     };
   },
   created() {
@@ -107,9 +59,12 @@ export default {
     homeRecommends,
     fashion,
     tabc,
-    goodslist
+    goodslist,
+    scroll
   },
   methods: {
+    // 网络请求
+
     gethome() {
       gethome().then(
         res => {
@@ -129,6 +84,22 @@ export default {
         this.goods[type].page += 1;
         console.log(this.goods[type].list);
       });
+    },
+    //事件监听
+
+    tabclick(index) {
+      switch (index) {
+        case 0:
+          this.goodstype = "pop";
+          break;
+        case 1:
+          this.goodstype = "new";
+          break;
+        case 2:
+          this.goodstype = "sell";
+          break;
+      }
+      console.log(index);
     }
   }
 };
@@ -143,11 +114,19 @@ export default {
   z-index: 1;
   overflow: hidden;
 }
-.homeswiper {
-  padding-top: 44px;
-}
+
 .tabc {
   position: sticky;
-  top: 50px;
+  z-index: 22;
+  top: 46px;
+}
+.content {
+  height: calc(100% - 93px);
+  margin-top: 44px;
+  overflow: hidden;
+}
+#c {
+  border-top: 1px solid transparent;
+  height: 100vh;
 }
 </style>

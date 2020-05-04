@@ -2,9 +2,9 @@
   <div class="tabc">
     <div
       v-for="(item,index) in hometitle"
+      @click="clicktabc(index)"
       class="tab-content"
       :class="{active:index===curr}"
-      @click="clicktabc(index)"
     >
       <span>{{item.title}}</span>
     </div>
@@ -22,7 +22,9 @@ export default {
   },
   methods: {
     clicktabc(index) {
+      console.log("aa");
       this.curr = index;
+      this.$emit("tabclick", index);
     }
   }
 };
@@ -31,7 +33,8 @@ export default {
 .tabc {
   display: flex;
   text-align: center;
-  margin-top: 20px;
+  padding: 20px 0;
+  box-shadow: 0 3px 10px rgba(100, 100, 100, 0.1);
 }
 .tabc span {
   padding: 4px 3px;
