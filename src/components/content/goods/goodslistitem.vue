@@ -44,7 +44,7 @@ p {
 }
 .goodsitem li img {
   width: 100%;
-  height: 200px;
+  height: 225px;
 }
 .goods-list-Collect {
   position: relative;

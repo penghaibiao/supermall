@@ -15,8 +15,10 @@
       <homeRecommends :recommends="recommends"></homeRecommends>
       <fashion></fashion>
       <tabc class="tabc" :hometitle="hometitle" @tabclick="tabclick"></tabc>
+
       <goodslist :goods="goods[goodstype].list"></goodslist>
     </scroll>
+
     <backtop @click.native="backclick" v-show="isshow"></backtop>
   </div>
 </template>
@@ -94,7 +96,7 @@ export default {
         this.hometitle = res.data.filter.list;
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
-        console.log(this.goods[type].list);
+        this.$refs.scroll.scroll.finishPullUp();
       });
     },
     //事件监听
@@ -111,21 +113,26 @@ export default {
           this.goodstype = "sell";
           break;
       }
-      console.log(index);
     },
     backclick() {
       this.$refs.scroll.scroll.scrollTo(0, 0, 1000);
     },
     contentscroll(position) {
+      console.log(position.y);
+      var tabc = document.querySelector(".tabc");
+
       if (Math.abs(position.y) >= 1000) {
         this.isshow = true;
       } else {
         this.isshow = false;
       }
     },
+    tabcfixed(position) {
+      console.log(position.y);
+    },
     loadMore() {
       this.gethomegood(this.goodstype);
-      this.$refs.scroll.scroll.finishPullUp();
+      this.$refs.scroll.scroll.refresh();
     }
   }
 };
@@ -136,19 +143,18 @@ export default {
   background-color: #ff0077;
   color: aliceblue;
   font-weight: 700;
-  position: fixed;
+  position: relative;
   z-index: 1;
   overflow: hidden;
 }
 
 .tabc {
-  position: sticky;
+  position: relative;
   z-index: 22;
-  top: 46px;
+  top: 8px;
 }
 .content {
   height: calc(100% - 93px);
-  margin-top: 44px;
   overflow: hidden;
 }
 #c {

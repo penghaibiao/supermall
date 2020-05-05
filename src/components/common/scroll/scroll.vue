@@ -23,8 +23,6 @@ export default {
     }
   },
   mounted() {
-    console.log(BScroll);
-
     this.scroll = new BScroll(this.$refs.wrapper, {
       click: true,
       probeType: this.probeType,
