@@ -1,8 +1,7 @@
 <template>
   <div id="c">
-    <Navbar class="gouwu">
-      <div slot="nav-center">默默购物城</div>
-    </Navbar>
+    <tabc :hometitle="hometitle" @tabclick="tabclick" ref="tabc1" v-show="fiexd1" class="tabcc"></tabc>
+
     <scroll
       class="content"
       ref="scroll"
@@ -11,10 +10,13 @@
       :pullUpLoad="true"
       @pullingUp="loadMore"
     >
-      <homeswiper :banners="banners" class="homeswiper"></homeswiper>
+      <Navbar class="gouwu">
+        <div slot="nav-center">默默购物城</div>
+      </Navbar>
+      <homeswiper :banners="banners" class="homeswiper" @swiperimage="swiperimage"></homeswiper>
       <homeRecommends :recommends="recommends"></homeRecommends>
       <fashion></fashion>
-      <tabc class="tabc" :hometitle="hometitle" @tabclick="tabclick"></tabc>
+      <tabc :hometitle="hometitle" @tabclick="tabclick" ref="tabc2"></tabc>
 
       <goodslist :goods="goods[goodstype].list"></goodslist>
     </scroll>
@@ -57,7 +59,10 @@ export default {
         }
       },
       goodstype: "pop",
-      isshow: false
+      isshow: false,
+      tabcoffsetTop: 0,
+      fiexd1: null,
+      gundong: 0
     };
   },
   created() {
@@ -65,6 +70,15 @@ export default {
       this.gethomegood("pop"),
       this.gethomegood("new"),
       this.gethomegood("sell");
+  },
+  mounted() {},
+  destroyed() {},
+  activated() {
+    this.$refs.scroll.scroll.scrollTo(0, this.gundong, 0);
+    this.$refs.scroll.scroll.refresh();
+  },
+  deactivated() {
+    this.gundong = this.$refs.scroll.scroll.y;
   },
   components: {
     Navbar,
@@ -113,26 +127,29 @@ export default {
           this.goodstype = "sell";
           break;
       }
+      this.$refs.tabc1.curr = index;
+      this.$refs.tabc2.curr = index;
     },
     backclick() {
       this.$refs.scroll.scroll.scrollTo(0, 0, 1000);
     },
     contentscroll(position) {
-      console.log(position.y);
+      this.gundong = position.y;
       var tabc = document.querySelector(".tabc");
-
+      this.fiexd1 = Math.abs(position.y) > this.tabcoffsetTop;
       if (Math.abs(position.y) >= 1000) {
         this.isshow = true;
       } else {
         this.isshow = false;
       }
     },
-    tabcfixed(position) {
-      console.log(position.y);
-    },
+    tabcfixed(position) {},
     loadMore() {
       this.gethomegood(this.goodstype);
       this.$refs.scroll.scroll.refresh();
+    },
+    swiperimage() {
+      this.tabcoffsetTop = this.$refs.tabc2.$el.offsetTop;
     }
   }
 };
@@ -147,14 +164,23 @@ export default {
   z-index: 1;
   overflow: hidden;
 }
-
-.tabc {
-  position: relative;
-  z-index: 22;
-  top: 8px;
+.tabcc {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 44;
+  right: 0;
+  background-color: #ffff;
 }
+.fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 44px;
+}
+
 .content {
-  height: calc(100% - 93px);
+  height: calc(100% - 50px);
   overflow: hidden;
 }
 #c {

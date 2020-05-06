@@ -1,13 +1,11 @@
 <template>
-  <div class="goodslist">
+  <div class="goodslist" @click="itemclick">
     <ul class="goodsitem">
       <li>
-        <a :href="goodsitem.link">
-          <img :src="goodsitem.show.img" alt />
-          <p>{{goodsitem.title}}</p>
-          <span class="goods-list-Collect">价格：{{goodsitem.price}}</span>
-          <span class="Pass">{{goodsitem.cfav}}</span>
-        </a>
+        <img :src="goodsitem.show.img" alt />
+        <p>{{goodsitem.title}}</p>
+        <span class="goods-list-Collect">价格：{{goodsitem.price}}</span>
+        <span class="Pass">{{goodsitem.cfav}}</span>
       </li>
     </ul>
   </div>
@@ -16,6 +14,11 @@
 export default {
   props: {
     goodsitem: Object
+  },
+  methods: {
+    itemclick() {
+      this.$router.push("/detail/" + this.goodsitem.iid);
+    }
   }
 };
 </script>

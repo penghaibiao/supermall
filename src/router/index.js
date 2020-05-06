@@ -5,6 +5,7 @@ const home = () => import('../views/home/home')
 const fenlei = () => import('../views/fenlei/fenlei')
 const xinxi = () => import('../views/xinxi/xinxi')
 const zhanshi = () => import('../views/zhanshi/zhanshi')
+const detail = () => import('../views/detall/datall')
 
 // 1.安装VueRouter
 Vue.use(VueRouter)
@@ -30,6 +31,10 @@ const routes = [
   {
     path: '/zhanshi',
     component: zhanshi
+  },
+  {
+    path: '/detail/:iid',
+    component: detail
   }
 ]
 
