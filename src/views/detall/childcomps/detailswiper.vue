@@ -23,7 +23,7 @@ export default {
 </script>
 <style scoped>
 .Swiper {
-  height: 300px;
+  height: 229px;
   overflow: hidden;
 }
 </style>

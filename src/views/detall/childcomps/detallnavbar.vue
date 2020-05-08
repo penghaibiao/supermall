@@ -1,8 +1,8 @@
 <template>
   <div>
     <Navbar>
-      <div slot="nav-left" class="detaleft" @click="imgclick">
-        <img src="../../../assets/img/common/back.svg" alt />
+      <div slot="nav-left" class="detaleft">
+        <img src="../../../assets/img/common/back.svg" alt @click="imgclick" />
       </div>
       <ul slot="nav-center">
         <li v-for="(item,index) in title" @click="detaclick(index)">
