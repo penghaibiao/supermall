@@ -9,7 +9,7 @@
     <div class="Shop-Introduction">
       <div class="Introduction-left">
         <ul>
-          <li>{{shop.cSells}}</li>
+          <li>{{shop.cSells | guolvqi}}</li>
           <li>{{shop.cGoods}}</li>
           <li>总销量</li>
           <li>全部宝贝</li>
@@ -19,7 +19,7 @@
         <div v-for="item in shop.score" class="score">
           <span>{{item.name}}</span>
           <span :class="{lv:!item.isBetter}" class="ee">{{item.score}}</span>
-          <span :class="{gao:item.isBetter}">{{item.isBetter?'高':'低'}}</span>
+          <span :class="{gao:item.isBetter}" class="aa">{{item.isBetter?'高':'低'}}</span>
         </div>
       </div>
     </div>
@@ -30,6 +30,15 @@
 export default {
   props: {
     shop: Object
+  },
+  filters: {
+    guolvqi(value) {
+      let result = value;
+      if (value > 10000) {
+        result = (result / 10000).toFixed(1) + "万";
+      }
+      return result;
+    }
   }
 };
 </script>
@@ -57,6 +66,10 @@ export default {
 }
 .ee {
   color: red;
+}
+.aa {
+  color: #fff;
+  background-color: forestgreen;
 }
 .shop-logo {
   overflow: hidden;

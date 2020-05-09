@@ -29,7 +29,7 @@ export default {
       this.currentindex = index;
     },
     imgclick() {
-      this.$router.back();
+      this.$router.go(-1);
     }
   }
 };

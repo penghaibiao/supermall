@@ -13,7 +13,7 @@
       <Navbar class="gouwu">
         <div slot="nav-center">默默购物城</div>
       </Navbar>
-      <homeswiper :banners="banners" class="homeswiper" @swiperimage="swiperimage"></homeswiper>
+      <homeswiper :banners="banners" class="homeswiper" @swiperimage="swiperimage" ref="swiper"></homeswiper>
       <homeRecommends :recommends="recommends"></homeRecommends>
       <fashion></fashion>
       <tabc :hometitle="hometitle" @tabclick="tabclick" ref="tabc2"></tabc>
@@ -66,14 +66,15 @@ export default {
     };
   },
   created() {
+    console.log("新的");
     this.gethome(),
       this.gethomegood("pop"),
       this.gethomegood("new"),
       this.gethomegood("sell");
   },
-  mounted() {},
-  destroyed() {},
+
   activated() {
+    // better - scroll;版本最新有问题。。。可以用1.13.2版本
     this.$refs.scroll.scroll.scrollTo(0, this.gundong, 0);
     this.$refs.scroll.scroll.refresh();
   },
@@ -134,7 +135,6 @@ export default {
       this.$refs.scroll.scroll.scrollTo(0, 0, 1000);
     },
     contentscroll(position) {
-      this.gundong = position.y;
       var tabc = document.querySelector(".tabc");
       this.fiexd1 = Math.abs(position.y) > this.tabcoffsetTop;
       if (Math.abs(position.y) >= 1000) {

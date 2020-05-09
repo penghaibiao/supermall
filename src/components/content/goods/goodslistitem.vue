@@ -2,7 +2,7 @@
   <div class="goodslist" @click="itemclick">
     <ul class="goodsitem">
       <li>
-        <img :src="goodsitem.show.img" alt />
+        <img :src="showimage" alt />
         <p>{{goodsitem.title}}</p>
         <span class="goods-list-Collect">价格：{{goodsitem.price}}</span>
         <span class="Pass">{{goodsitem.cfav}}</span>
@@ -18,6 +18,11 @@ export default {
   methods: {
     itemclick() {
       this.$router.push("/detail/" + this.goodsitem.iid);
+    }
+  },
+  computed: {
+    showimage() {
+      return this.goodsitem.image || this.goodsitem.show.img;
     }
   }
 };
