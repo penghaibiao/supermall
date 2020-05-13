@@ -2,7 +2,7 @@
   <div class="goodslist" @click="itemclick">
     <ul class="goodsitem">
       <li>
-        <img :src="showimage" alt />
+        <img v-lazy="showimage" alt @load="imgload" />
         <p>{{goodsitem.title}}</p>
         <span class="goods-list-Collect">价格：{{goodsitem.price}}</span>
         <span class="Pass">{{goodsitem.cfav}}</span>
@@ -16,6 +16,9 @@ export default {
     goodsitem: Object
   },
   methods: {
+    imgload() {
+      this.$bus.$emit("itemimgload");
+    },
     itemclick() {
       this.$router.push("/detail/" + this.goodsitem.iid);
     }

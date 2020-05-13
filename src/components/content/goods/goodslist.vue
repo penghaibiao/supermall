@@ -9,6 +9,10 @@ export default {
   props: {
     goods: Array
   },
+  mounted() {
+    console.log(this.goods);
+  },
+
   components: {
     goodslistitem
   }

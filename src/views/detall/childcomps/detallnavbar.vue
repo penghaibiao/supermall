@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="nav-bar">
     <Navbar>
       <div slot="nav-left" class="detaleft">
         <img src="../../../assets/img/common/back.svg" alt @click="imgclick" />
@@ -27,6 +27,7 @@ export default {
   methods: {
     detaclick(index) {
       this.currentindex = index;
+      this.$emit("titleclick", index);
     },
     imgclick() {
       this.$router.go(-1);
@@ -35,6 +36,14 @@ export default {
 };
 </script>
 <style scoped>
+.nav-bar {
+  background-color: #fff;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 12;
+}
 .title {
 }
 ul {

@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     homeswiper() {
-      console.log("aaa");
       if (!this.isload) {
         this.$emit("swiperimage");
         this.isload = true;

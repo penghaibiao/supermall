@@ -5,7 +5,7 @@
     <scroll
       class="content"
       ref="scroll"
-      :probeType="3"
+      :probeType="2"
       @scroll="contentscroll"
       :pullUpLoad="true"
       @pullingUp="loadMore"
@@ -31,8 +31,10 @@ import fashion from "./zihome/fashion"; //本周流行
 
 import Navbar from "../../components/common/navbar/NavBar";
 import scroll from "../../components/common/scroll/scroll"; //滚动
-import backtop from "../../components/content/backtop/backtop"; //
+// import backtop from "../../components/content/backtop/backtop";
+//回到顶部以被混入可以多个组件使用
 
+import { itemmixin, backTopMixin } from "../../components/common/mixin"; //mixin合并混入
 import goodslist from "../../components/content/goods/goodslist";
 import tabc from "../../components/content/tabcontrol/tabc";
 
@@ -59,14 +61,14 @@ export default {
         }
       },
       goodstype: "pop",
-      isshow: false,
+
       tabcoffsetTop: 0,
       fiexd1: null,
       gundong: 0
     };
   },
+  mixins: [itemmixin, backTopMixin],
   created() {
-    console.log("新的");
     this.gethome(),
       this.gethomegood("pop"),
       this.gethomegood("new"),
@@ -88,8 +90,7 @@ export default {
     fashion,
     tabc,
     goodslist,
-    scroll,
-    backtop
+    scroll
   },
   methods: {
     // 网络请求
@@ -137,11 +138,8 @@ export default {
     contentscroll(position) {
       var tabc = document.querySelector(".tabc");
       this.fiexd1 = Math.abs(position.y) > this.tabcoffsetTop;
-      if (Math.abs(position.y) >= 1000) {
-        this.isshow = true;
-      } else {
-        this.isshow = false;
-      }
+
+      this.listshowbackTop(position);
     },
     tabcfixed(position) {},
     loadMore() {
@@ -154,7 +152,7 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
 .gouwu {
   width: 100%;
   background-color: #ff0077;

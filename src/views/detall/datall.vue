@@ -1,40 +1,25 @@
 <template>
   <div id="datall">
-    <detalnavbar></detalnavbar>
-    <scroll class="content" ref="scroll">
+    <detalnavbar @titleclick="titleclick" ref="detalnavbar"></detalnavbar>
+    <scroll class="content" ref="scroll" @scroll="contentscroll" :probeType="3">
       <detailswiper :topimage="topimage"></detailswiper>
       <datailbaseinfo :goods="goods"></datailbaseinfo>
       <datailshopinfo :shop="shop" class="shop"></datailshopinfo>
       <!--  -->
       <datailcomment :detailInfo="detailInfo" @imageload="imageload"></datailcomment>
       <!-- 商品详情组件 -->
-      <datailparameter :chima="chima"></datailparameter>
+      <datailparameter :chima="chima" ref="params"></datailparameter>
       <!-- 商品参数组件 -->
-      <datailCommentary :Commentary="Commentary"></datailCommentary>
+      <datailCommentary :Commentary="Commentary" ref="commoent"></datailCommentary>
       <div class="datailconnent">
         <div class="Effect">推荐</div>
       </div>
-      <goodslist :goods="recommend"></goodslist>
+      <goodslist :goods="recommend" ref="tuijian"></goodslist>
     </scroll>
-    <ul>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>10</li>
-      <li>11</li>
-      <li>12</li>
-      <li>13</li>
-      <li>14</li>
-      <li>15</li>
-      <li>16</li>
-      <li>17</li>
-    </ul>
+    <backtop @click.native="backclick" v-show="isshow"></backtop>
+
+    <detailbottom @addCart="addCart"></detailbottom>
+    <toast v-show="dian" :text="text"></toast>
   </div>
 </template>
 <script>
@@ -45,7 +30,11 @@ import datailshopinfo from "./childcomps/datailshopinfo";
 import datailcomment from "./childcomps/datailcomment";
 import datailparameter from "./childcomps/datailparameter";
 import datailCommentary from "./childcomps/datailCommentary";
+import detailbottom from "./childcomps/detailbottom";
+
 import goodslist from "../../components/content/goods/goodslist";
+import toast from "../../components/common/toast/toast";
+import { itemmixin, backTopMixin } from "../../components/common/mixin";
 import {
   getdedail,
   Goods,
@@ -67,9 +56,15 @@ export default {
       detailInfo: {},
       chima: {},
       Commentary: {},
-      recommend: {}
+      recommend: {},
+      themeTopYs: [],
+      curr: 0,
+      isshow: false,
+      dian: false,
+      text: String
     };
   },
+  mixins: [itemmixin, backTopMixin],
   created() {
     this.iid = this.$route.params.iid;
     getdedail(this.iid).then(res => {
@@ -84,16 +79,58 @@ export default {
         this.Commentary = data.rate.list[0];
       }
     });
-    console.log("a");
 
     getrecommend().then(res => {
       this.recommend = res.data.list;
-      console.log(this.recommend);
     });
   },
+  mounted() {},
   methods: {
     imageload() {
       this.$refs.scroll.scroll.refresh();
+      this.themeTopYs.push(0);
+      this.themeTopYs.push(this.$refs.params.$el.offsetTop);
+      this.themeTopYs.push(this.$refs.commoent.$el.offsetTop);
+      this.themeTopYs.push(this.$refs.tuijian.$el.offsetTop);
+      console.log(this.themeTopYs);
+    },
+    titleclick(index) {
+      console.log(this.themeTopYs);
+
+      this.$refs.scroll.scroll.scrollTo(0, -this.themeTopYs[index], 1000);
+    },
+    contentscroll(position) {
+      const positionY = -position.y;
+      let length = this.themeTopYs.length;
+      for (let i = 0; i < length; i++) {
+        if (
+          (this.curr !== i &&
+            i < length - 1 &&
+            positionY >= this.themeTopYs[i] &&
+            positionY < this.themeTopYs[i + 1]) ||
+          (i === length - 1 && positionY > this.themeTopYs[parseInt(i)])
+        ) {
+          this.curr = i;
+          this.$refs.detalnavbar.currentindex = this.curr;
+          console.log(this.$refs.detalnavbar.currentindex);
+        }
+      }
+      this.listshowbackTop(position);
+    },
+    addCart() {
+      const duct = {};
+      duct.image = this.topimage[0];
+      duct.title = this.goods.title;
+      duct.desc = this.goods.desc;
+      duct.realPrice = this.goods.realPrice;
+      duct.iid = this.iid;
+      this.$store.commit("addCat", duct);
+      console.log("点");
+      this.dian = true;
+      this.text = "商品已经提交到购物车...";
+      setTimeout(() => {
+        this.dian = false;
+      }, 1100);
     }
   },
 
@@ -106,7 +143,9 @@ export default {
     datailcomment,
     datailparameter,
     datailCommentary,
-    goodslist
+    goodslist,
+    detailbottom,
+    toast
   }
 };
 </script>
@@ -118,7 +157,7 @@ export default {
   height: 100vh;
 }
 .content {
-  height: calc(100% -44px);
+  height: calc(100% - 44px - 49px);
 }
 .datailconnent {
   margin-left: 7px;
